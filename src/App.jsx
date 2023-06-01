@@ -20,7 +20,7 @@ function App() {
       },
     })
     console.log(position);
-    return position === null ? (<Marker position={coords}></Marker>) : (
+    return position === null ? (<Marker position={coords} icon={new Icon({iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41]})}></Marker>) : (
       <Marker position={position} icon={new Icon({iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41]})}>
         <Popup>You are here</Popup>
       </Marker>
