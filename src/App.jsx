@@ -2,6 +2,8 @@ import "./App.css";
 import { MapContainer, TileLayer, Marker, Popup,useMapEvents } from "react-leaflet";
 import { useState } from "react";
 import "leaflet/dist/leaflet.css";
+import markerIconPng from "leaflet/dist/images/marker-icon.png"
+import {Icon} from 'leaflet'
 
 
 function App() {
@@ -19,7 +21,7 @@ function App() {
     })
     console.log(position);
     return position === null ? (<Marker position={coords}></Marker>) : (
-      <Marker position={position}>
+      <Marker position={position} icon={new Icon({iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41]})}>
         <Popup>You are here</Popup>
       </Marker>
     )
