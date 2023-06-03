@@ -9,6 +9,7 @@ import {Icon} from 'leaflet'
 function App() {
   const coords = [21.505, 78.09]
   const [position, setPosition] = useState(null)
+  const [zoom,setZoom] = useState(5);
   function LocationMarker() {
     const map = useMapEvents({
       click() {
@@ -16,7 +17,8 @@ function App() {
       },
       locationfound(e) {
         setPosition(e.latlng)
-        map.flyTo(e.latlng, map.getZoom())
+        //setZoom(10);
+        map.flyTo(e.latlng,12)
       },
     })
     console.log(position);
@@ -30,7 +32,7 @@ function App() {
     <div id="mapzz">
       <MapContainer
     center={{ lat: coords[0], lng: coords[1] }}
-    zoom={5}
+    zoom={zoom}
     scrollWheelZoom={true}
     style={{height: "100vh"}}
     >
