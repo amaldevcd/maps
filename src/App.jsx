@@ -10,7 +10,7 @@ import { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import { Icon } from "leaflet";
-import { Form } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 
 function App() {
   const coords = [21.505, 78.09];
@@ -57,7 +57,24 @@ function App() {
   return (
     <div id="mapzz">
       <div className="search">
-        <Form.Control size="lg" type="text" placeholder="Search..." />
+        <InputGroup>
+          <Form.Control size="lg" type="text" placeholder="Search..." />
+          <InputGroup.Text
+            id="basic-addon2 search-button"
+            className="search-button"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              className="bi bi-search"
+              viewBox="0 0 16 16"
+            >
+              <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+            </svg>
+          </InputGroup.Text>
+        </InputGroup>
       </div>
       <div className="map-section">
         <MapContainer
@@ -72,6 +89,18 @@ function App() {
           />
           <LocationMarker />
         </MapContainer>
+      </div>
+      <div className="live-loc">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="25"
+          height="25"
+          fill="blue"
+          className="bi bi-geo-alt-fill"
+          viewBox="0 0 16 16"
+        >
+          <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10zm0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6z" />
+        </svg>
       </div>
     </div>
   );
