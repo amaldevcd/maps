@@ -6,62 +6,51 @@ import {
   Popup,
   useMapEvents,
 } from "react-leaflet";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "leaflet/dist/leaflet.css";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import { Icon } from "leaflet";
 import { Form, InputGroup } from "react-bootstrap";
+import axios from 'axios'
+import L from 'leaflet'
 
 function App() {
   const coords = [21.505, 78.09];
-  const [position, setPosition] = useState(null);
-  const [zoom, setZoom] = useState(5);
-  function LocationMarker() {
-    const map = useMapEvents({
-      click() {
-        map.locate();
-      },
-      locationfound(e) {
-        setPosition(e.latlng);
-        //setZoom(10);
-        map.flyTo(e.latlng, 12);
-      },
-    });
-    console.log(position);
-    return position === null ? (
-      <Marker
-        position={coords}
-        icon={
-          new Icon({
-            iconUrl: markerIconPng,
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-          })
-        }
-      ></Marker>
-    ) : (
-      <Marker
-        position={position}
-        icon={
-          new Icon({
-            iconUrl: markerIconPng,
-            iconSize: [25, 41],
-            iconAnchor: [12, 41],
-          })
-        }
-      >
-        <Popup>You are here</Popup>
-      </Marker>
-    );
+  const [position, setPosition] = useState([76.708382,11.412055]);
+  const [search,setSearch] = useState('')
+
+  const handleFind = () =>
+  {
+    axios.get(`https://api.openrouteservice.org/geocode/autocomplete?api_key=${import.meta.env.VITE_API_URL}&text=${search}`)
+    .then((res)=>setPosition([res.data.features[0].geometry.coordinates[1],res.data.features[0].geometry.coordinates[0]]))
+    .catch((err)=>console.log(err))
+    console.log(position+" hipos");
   }
+  //const mapRef =useRef(null)
+
+  useEffect(()=>
+  {
+  },[position]);
+
+  
+
+  const markerIcon = L.icon({
+    iconUrl: markerIconPng,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    tooltipAnchor: [16, -28],
+  });
+
   return (
     <div id="mapzz">
       <div className="search">
         <InputGroup>
-          <Form.Control size="lg" type="text" placeholder="Search..." />
+          <Form.Control size="lg" type="text" placeholder="Search..." onChange={(e)=>setSearch(e.target.value)} />
           <InputGroup.Text
             id="basic-addon2 search-button"
             className="search-button"
+            onClick={handleFind}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -79,15 +68,22 @@ function App() {
       <div className="map-section">
         <MapContainer
           center={{ lat: coords[0], lng: coords[1] }}
-          zoom={zoom}
-          scrollWheelZoom={false}
+          zoom={5}
+          scrollWheelZoom={true}
           style={{ height: "100vh" }}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <LocationMarker />
+          {/* <LocationMarker /> */}
+          {position && (
+            <Marker position={position} icon={markerIcon}>
+              <Popup>
+                A marker is placed at lat: {position[0]}, lng: {position[1]}
+              </Popup>
+            </Marker>
+          )}
         </MapContainer>
       </div>
       <div className="live-loc">
