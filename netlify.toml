@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/geocode/*"
+  to = "https://api.openrouteservice.org/geocode/:splat"
+  status = 200
