@@ -24,16 +24,18 @@ function App() {
   //const url=proxyUrl+apiUrl;
   const handleFind = () =>
   {
-    axios.get(`/geocode/autocomplete?api_key=${import.meta.env.VITE_API_URL}&text=${search}`)
-    .then((res)=>setPosition([res.data.features[0].geometry.coordinates[1],res.data.features[0].geometry.coordinates[0]]))
-    .catch((err)=>console.log(err))
-    console.log(position+" hipos");
+    if(search)
+    {
+      axios.get(`/geocode/autocomplete?api_key=${import.meta.env.VITE_API_URL}&text=${search}`)
+      .then((res)=>setPosition([res.data.features[0].geometry.coordinates[1],res.data.features[0].geometry.coordinates[0]]))
+      .catch((err)=>console.log(err))
+      console.log(position+" hipos");
+    }
+
   }
   //const mapRef =useRef(null)
 
-  useEffect(()=>
-  {
-  },[position]);
+  
 
   
 
