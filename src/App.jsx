@@ -11,33 +11,37 @@ import "leaflet/dist/leaflet.css";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import { Icon } from "leaflet";
 import { Form, InputGroup } from "react-bootstrap";
-import axios from 'axios'
-import L from 'leaflet'
+import axios from "axios";
+import L from "leaflet";
 
 function App() {
-
   const coords = [21.505, 78.09];
-  const [position, setPosition] = useState([11.412055,76.708382,]);
-  const [search,setSearch] = useState('')
+  const [position, setPosition] = useState([11.412055, 76.708382]);
+  const [search, setSearch] = useState("");
   //const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-  const apiUrl = `https://api.openrouteservice.org/geocode/autocomplete?api_key=${import.meta.env.VITE_API_URL}&text=${search}`;
+  const apiUrl = `https://api.openrouteservice.org/geocode/autocomplete?api_key=${
+    import.meta.env.VITE_API_URL
+  }&text=${search}`;
   //const url=proxyUrl+apiUrl;
-  const handleFind = () =>
-  {
-    if(search)
-    {
-      axios.get(`/geocode/autocomplete?api_key=${import.meta.env.VITE_API_URL}&text=${search}`)
-      .then((res)=>setPosition([res.data.features[0].geometry.coordinates[1],res.data.features[0].geometry.coordinates[0]]))
-      .catch((err)=>console.log(err))
-      console.log(position+" hipos");
+  const handleFind = () => {
+    if (search) {
+      axios
+        .get(
+          `/geocode/autocomplete?api_key=${
+            import.meta.env.VITE_API_URL
+          }&text=${search}`
+        )
+        .then((res) =>
+          setPosition([
+            res.data.features[0].geometry.coordinates[1],
+            res.data.features[0].geometry.coordinates[0],
+          ])
+        )
+        .catch((err) => console.log(err));
+      console.log(position + " hipos");
     }
-
-  }
+  };
   //const mapRef =useRef(null)
-
-  
-
-  
 
   const markerIcon = L.icon({
     iconUrl: markerIconPng,
@@ -47,25 +51,43 @@ function App() {
     tooltipAnchor: [16, -28],
   });
 
-  useEffect(()=>
-  {
-    const keyDownHandler = event => {
-      if(event.key === 'Enter')
-      {
-        console.log("key prss:",event.key);
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      if (event.key === "Enter") {
+        console.log("key prss:", event.key);
         handleFind();
       }
-    }
-    document.addEventListener('keydown',keyDownHandler);
+    };
+    document.addEventListener("keydown", keyDownHandler);
     return () => {
-      document.removeEventListener('keydown',keyDownHandler)
-    }
-  },[search])
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, [search]);
+
+  function AddClick(){
+    useMapEvents({
+      click(e){
+        console.log(e.latlng.lat);
+        setPosition([e.latlng.lat,e.latlng.lng])
+      }
+    })
+    return null;
+  }
+
+
   return (
     <div id="mapzz">
       <div className="search">
         <InputGroup>
-          <Form.Control size="lg" type="text" placeholder="Search..." onChange={(e)=>{console.log(e.target.value);setSearch(e.target.value);}} />
+          <Form.Control
+            size="lg"
+            type="text"
+            placeholder="Search..."
+            onChange={(e) => {
+              console.log(e.target.value);
+              setSearch(e.target.value);
+            }}
+          />
           <InputGroup.Text
             id="basic-addon2 search-button"
             className="search-button"
@@ -96,6 +118,7 @@ function App() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           {/* <LocationMarker /> */}
+          <AddClick/>        
           {position && (
             <Marker position={position} icon={markerIcon}>
               <Popup>
