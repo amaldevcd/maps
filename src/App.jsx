@@ -80,7 +80,7 @@ function App() {
     if (mapRef.current) {
       console.log("im here");
       const map = mapRef.current;
-      map.flyTo([position[0], position[1]], 13);
+      map.flyTo([position[0], position[1]], 17);
     }
   };
   useEffect(() => {
