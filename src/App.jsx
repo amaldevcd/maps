@@ -15,13 +15,16 @@ import axios from 'axios'
 import L from 'leaflet'
 
 function App() {
-  const coords = [21.505, 78.09];
-  const [position, setPosition] = useState([76.708382,11.412055]);
-  const [search,setSearch] = useState('')
 
+  const coords = [21.505, 78.09];
+  const [position, setPosition] = useState([11.412055,76.708382,]);
+  const [search,setSearch] = useState('')
+  //const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+  const apiUrl = `https://api.openrouteservice.org/geocode/autocomplete?api_key=${import.meta.env.VITE_API_URL}&text=${search}`;
+  //const url=proxyUrl+apiUrl;
   const handleFind = () =>
   {
-    axios.get(`https://api.openrouteservice.org/geocode/autocomplete?api_key=${import.meta.env.VITE_API_URL}&text=${search}`)
+    axios.get(`/geocode/autocomplete?api_key=${import.meta.env.VITE_API_URL}&text=${search}`)
     .then((res)=>setPosition([res.data.features[0].geometry.coordinates[1],res.data.features[0].geometry.coordinates[0]]))
     .catch((err)=>console.log(err))
     console.log(position+" hipos");
@@ -67,7 +70,7 @@ function App() {
       </div>
       <div className="map-section">
         <MapContainer
-          center={{ lat: coords[0], lng: coords[1] }}
+          center={{ lat: position[0], lng: position[1] }}
           zoom={5}
           scrollWheelZoom={true}
           style={{ height: "100vh" }}
