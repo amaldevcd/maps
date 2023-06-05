@@ -1,7 +1,0 @@
-{
-    "rewrites" : [
-        {
-            "source":"/geocode/:path*","destination":"https://api.openrouteservice.org/geocode/:path*"
-        }
-    ]
-}
