@@ -1,12 +1,12 @@
 import "./App.css";
 import {
   MapContainer,
-  TileLayer,
+  TileLayer,        
   Marker,
   Popup,
   useMapEvents,
 } from "react-leaflet";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "leaflet/dist/leaflet.css";
 import markerIconPng from "leaflet/dist/images/marker-icon.png";
 import { Icon } from "leaflet";
@@ -74,6 +74,20 @@ function App() {
     return null;
   }
 
+  const mapRef = useRef(null);
+
+  const handleFlyTo = () => {
+    if (mapRef.current) {
+      console.log("im here");
+      const map = mapRef.current;
+      map.flyTo([position[0], position[1]], 13);
+    }
+  };
+  useEffect(() => {
+    console.log("triggered position");
+    handleFlyTo();
+    // Fly to the new marker position when it changes
+  }, [position]);
 
   return (
     <div id="mapzz">
@@ -112,6 +126,7 @@ function App() {
           zoom={5}
           scrollWheelZoom={true}
           style={{ height: "100vh" }}
+          ref={mapRef}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
