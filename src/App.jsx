@@ -45,11 +45,25 @@ function App() {
     tooltipAnchor: [16, -28],
   });
 
+  useEffect(()=>
+  {
+    const keyDownHandler = event => {
+      if(event.key === 'Enter')
+      {
+        console.log("key prss:",event.key);
+        handleFind();
+      }
+    }
+    document.addEventListener('keydown',keyDownHandler);
+    return () => {
+      document.removeEventListener('keydown',keyDownHandler)
+    }
+  },[search])
   return (
     <div id="mapzz">
       <div className="search">
         <InputGroup>
-          <Form.Control size="lg" type="text" placeholder="Search..." onChange={(e)=>setSearch(e.target.value)} />
+          <Form.Control size="lg" type="text" placeholder="Search..." onChange={(e)=>{console.log(e.target.value);setSearch(e.target.value);}} />
           <InputGroup.Text
             id="basic-addon2 search-button"
             className="search-button"
