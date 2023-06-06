@@ -8,21 +8,16 @@ import {
 } from "react-leaflet";
 import { useEffect, useState, useRef } from "react";
 import "leaflet/dist/leaflet.css";
-import markerIconPng from "leaflet/dist/images/marker-icon.png";
-import { Icon } from "leaflet";
+import markerIconPng from "leaflet/dist/images/marker-icon.png"
 import { Form, InputGroup } from "react-bootstrap";
 import axios from "axios";
 import L from "leaflet";
 
 function App() {
-  const coords = [21.505, 78.09];
   const [position, setPosition] = useState([11.412055, 76.708382]);
   const [search, setSearch] = useState("");
-  //const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-  const apiUrl = `https://api.openrouteservice.org/geocode/autocomplete?api_key=${
-    import.meta.env.VITE_API_URL
-  }&text=${search}`;
-  //const url=proxyUrl+apiUrl;
+
+  //api call for finding coordinates
   const handleFind = () => {
     if (search) {
       axios
@@ -37,11 +32,10 @@ function App() {
             res.data.features[0].geometry.coordinates[0],
           ])
         )
-        .catch((err) => console.log(err));
-      console.log(position + " hipos");
+        .catch(() => alert("Location not found. Try entering the nearest landmark"));
     }
   };
-  //const mapRef =useRef(null)
+
 
   const markerIcon = L.icon({
     iconUrl: markerIconPng,
@@ -51,10 +45,11 @@ function App() {
     tooltipAnchor: [16, -28],
   });
 
+  //Press enter to search
   useEffect(() => {
     const keyDownHandler = (event) => {
       if (event.key === "Enter") {
-        console.log("key prss:", event.key);
+        //console.log("key prss:", event.key);
         handleFind();
       }
     };
@@ -64,10 +59,12 @@ function App() {
     };
   }, [search]);
 
+
+  //Update click
   function AddClick(){
     useMapEvents({
       click(e){
-        console.log(e.latlng.lat);
+        //console.log(e.latlng.lat);
         setPosition([e.latlng.lat,e.latlng.lng])
       }
     })
@@ -78,14 +75,14 @@ function App() {
 
   const handleFlyTo = () => {
     if (mapRef.current) {
-      console.log("im here");
+      //console.log("im here");
       const map = mapRef.current;
       map.flyTo([position[0], position[1]], 17);
     }
   };
 
   useEffect(() => {
-    console.log("triggered position");
+    //console.log("triggered position");
     handleFlyTo();
     // Fly to the new marker position when it changes
   }, [position]);
@@ -103,12 +100,13 @@ function App() {
 
   const changeLoc = (e) =>
   {
-    console.log(e);
+    //console.log(e);
     setPosition([e.latlng.lat,e.latlng.lng])
   }
 
   return (
     <div id="mapzz">
+      {/* Search Box */}
       <div className="search">
         <InputGroup>
           <Form.Control
@@ -116,10 +114,12 @@ function App() {
             type="text"
             placeholder="Search..."
             onChange={(e) => {
-              console.log(e.target.value);
+              //console.log(e.target.value);
               setSearch(e.target.value);
             }}
           />
+
+          {/* Search Icon */}
           <InputGroup.Text
             id="basic-addon2 search-button"
             className="search-button"
@@ -138,6 +138,7 @@ function App() {
           </InputGroup.Text>
         </InputGroup>
       </div>
+
       <div className="map-section">
         <MapContainer
           center={{ lat: position[0], lng: position[1] }}
@@ -161,6 +162,8 @@ function App() {
           )}
         </MapContainer>
       </div>
+
+      {/* Live Location  */}
       <div className="live-loc" onClick={handleLiveLoc}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
